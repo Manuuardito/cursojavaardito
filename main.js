@@ -1,40 +1,119 @@
 
-function edadDni() {
-    let ingresante = parseInt(-1);
-    let edad = parseInt(prompt("Ingrese su edad"));
-    alert(`su edad es de ${edad}`);
-    if (edad >= 21) { 
-        alert("Puede comprar su entrada en campo General Azul o Vip Blanco");
-        ingresante = 2
-    } else if (edad >= 18) {
-        alert("Puede comprar su entrada en campo General Verde");
-        ingresante = 1
-    } else if (edad > 0) {
-        alert("No puede comprar entradas, no cumple con el requisito minimo de edad");
-        ingresante = 0 
-    } return ingresante
-} 
+//simulador venta de entradas para una fiesta para mayores de 18 años
 
-condicion = edadDni();
-while (true) {
-    if (condicion != -1) {
-       break; 
-    } 
-    alert("Edad invalida, por favor ingrese un valor mayor a 0")
-    condicion = edadDni();
+
+
+
+/* INICIO DE BIENVENIDO */
+alert("Bienvenido a Clarifest");
+alert("Evento valido para mayores de 18 años")
+
+let usuario = prompt("Ingrese su Nombre");
+let contrasenia = prompt("Ingrese una contraseña");
+let edad = parseInt(prompt("Ingrese su edad"));
+
+while (usuario == "") {
+  alert("El nombre no puede ser vacío");
+  usuario = prompt("Ingrese su Nombre");
 }
 
-function valorEntrada (condicion) {
-    const gverde = parseInt(5000)
-    const gazul = parseInt(7000)
-    const vblanco = parseInt(10000)
-    if (condicion === 1) {
-        alert(`El valor de la Entrada del Campo General Verde: $${gverde}`);
+while (contrasenia == "") {
+  alert("La contraseña no puede ser vacía");
+  contrasenia = prompt("Ingrese una contraseña");
+}
+
+if (edad >= 0 && edad <= 17) {
+    alert("No cumple con la edad minima para entrar a la fiesta");
+    edad = prompt("Ingrese una edad valida")
+  }
+
+
+if (usuario == "Emmanuel" || usuario == "emmanuel") {
+  alert("Binvenida Emmanuel, te estabamos esperando!. ");
+}
+
+// DEFINICIÓN DEL CATALOGO DE ENTRADAS:
+
+const catalogoCompleto = [
+    { id: 1, nombre: "Verde", precio: 5000 },
+    { id: 2, nombre: "Azul", precio: 7000 },
+    { id: 3, nombre: "Blanco", precio: 8000 },
+    { id: 4, nombre: "Rabavip", precio: 9000 },
+  ];
+  
+  alert("Catálogo Completo:");
+  
+  // Mostrar Catálogo
+  const itemsCatalogo = catalogoCompleto.map(producto => producto.nombre).join('\n');
+  alert(itemsCatalogo);
+  
+  // Filtrar Productos por Precio
+  const montoFiltro = parseInt(prompt("Ingrese 1 para ver los precios o 0 para continuar sin ver los precios"));
+  
+  if (montoFiltro !== 0) {
+    const productosFiltrados = catalogoCompleto.filter(producto => producto.precio > montoFiltro);
+    
+    if (productosFiltrados.length > 0) {
+      alert("Productos Filtrados:");
+      for (const producto of productosFiltrados) {
+        alert(`Producto: ${producto.nombre}\nPrecio: ${producto.precio}`);
+      }
     } else {
-        alert(`El valor de la Entrada del Campo General Azul: $${gazul}\nEl Vip Blanco: $${vblanco}`)
+      alert("No se encontraron productos que cumplan con el filtro.");
     }
-}
-
-if (condicion != 0) {
-    valorEntrada(condicion)
-}
+  } else {
+    alert("No se filtrará por precio.");
+  }
+  
+  // Seleccionar un Producto
+  function seleccionarProducto() {
+    const numeroProducto = parseInt(prompt(`Ingrese el número del producto que desea comprar o 0 para finalizar:
+  1 - Verde;
+  2 - Azul;
+  3 - Blanco;
+  4 - Rabavip;
+  `));
+    return numeroProducto;
+  }
+  
+  // Crear el Carrito
+  const carrito = [];
+  
+  let producto1;
+  do {
+    producto1 = seleccionarProducto();
+    if (producto1 !== 0) {
+      const productoSeleccionado = catalogoCompleto.find(p => p.id === producto1);
+      if (productoSeleccionado) {
+        carrito.push(productoSeleccionado);
+      } else {
+        alert("Producto no válido. Por favor, intente nuevamente.");
+      }
+    }
+  } while (producto1 !== 0 && isNaN(producto1));
+  
+  // Mostrar el Carrito
+  if (carrito.length > 0) {
+    alert("Carrito Seleccionado:");
+    for (const productoCarrito of carrito) {
+      alert(productoCarrito.nombre);
+    }
+  } else {
+    alert("El carrito está vacío.");
+  }
+  
+  // Calcular el Subtotal
+  const subTotal = carrito.reduce((acumulado, producto) => acumulado + producto.precio, 0);
+  
+  // Calcular el Monto Total
+  function montoTotal(monto) {
+    return (monto * 1.21).toFixed(2); // Formato con dos decimales
+  }
+  
+  const montoTotalcarrito = montoTotal(subTotal);
+  
+  alert("Subtotal:");
+  alert(subTotal);
+  
+  alert("Monto Total con IVA:");
+  alert(montoTotalcarrito);
